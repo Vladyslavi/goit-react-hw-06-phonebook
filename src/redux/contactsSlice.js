@@ -26,10 +26,10 @@ const contactsSlice = createSlice({
             };
         },
         removeContact(state, action) {
-            const index = state.items.findIndex(
-                contact => contact.id !== action.payload
+            const updatedItems = state.items.filter(
+                (contact) => contact.id !== action.payload
             );
-            state.items.splice(index, 1);
+            state.items = updatedItems;
         },
     },
 });
