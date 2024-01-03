@@ -19,19 +19,20 @@ const contactsSlice = createSlice({
             reducer(state, action) {
                 state.items.push(action.payload);
             },
+
+            prepare(newContact) {
+                return {
+                    payload: { id: nanoid(), ...newContact },
+                };
+            },
+            removeContact(state, action) {
+                const updatedItems = state.items.filter(
+                    (contact) => contact.id !== action.payload
+                );
+                state.items = updatedItems;
+            },
         },
-        prepare(newContact) {
-            return {
-                payload: { id: nanoid(), ...newContact },
-            };
-        },
-        removeContact(state, action) {
-            const updatedItems = state.items.filter(
-                (contact) => contact.id !== action.payload
-            );
-            state.items = updatedItems;
-        },
-    },
+    }
 });
 
 export const { addContact, removeContact } = contactsSlice.actions;
@@ -40,3 +41,5 @@ export const contactsReducer = persistReducer(
     { key: 'contacts', storage },
     contactsSlice.reducer
 );
+
+export const prepareContact = contactsSlice.actions.addContact.prepare;
